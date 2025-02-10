@@ -236,4 +236,49 @@ h1, h2, h3, h4, h5, h6 {
   .hex-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Game Styles */
+.game-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+}
+
+.game-canvas {
+  border: 2px solid var(--retro-amber);
+  background: var(--deep-space);
+  box-shadow: 0 0 20px var(--screen-glow);
+}
+
+.game-score {
+  color: var(--retro-amber);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.game-controls {
+  color: var(--crt-green);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--retro-amber);
+  font-size: 2rem;
+  text-align: center;
+  text-shadow: 0 0 10px var(--screen-glow);
 } 

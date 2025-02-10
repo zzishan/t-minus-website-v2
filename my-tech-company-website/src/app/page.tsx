@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Game from './components/Game';
 
 const BOOT_SEQUENCE = [
   'Initializing T-Minus mission control...',
@@ -79,6 +80,7 @@ export default function Home() {
   const commandInputRef = useRef<HTMLInputElement>(null);
   const [terminalOutput, setTerminalOutput] = useState<Array<{type: 'command' | 'response', content: string}>>([]);
   const terminalRef = useRef<HTMLDivElement>(null);
+  const [showGame, setShowGame] = useState(false);
 
   useEffect(() => {
     // Boot sequence animation
@@ -113,6 +115,9 @@ export default function Home() {
         break;
       case '/contact':
         window.location.href = '/contact';
+        break;
+      case '/vader':
+        setShowGame(true);
         break;
     }
     
@@ -181,6 +186,8 @@ export default function Home() {
                   /services - View our services
                   <br />
                   /contact - Get in touch
+                  <br />
+                  /vader - Join the Dark Side
                 </div>
               )}
             </div>
@@ -233,6 +240,8 @@ export default function Home() {
           </footer>
         </>
       )}
+
+      {showGame && <Game onClose={() => setShowGame(false)} />}
     </main>
   );
 } 
