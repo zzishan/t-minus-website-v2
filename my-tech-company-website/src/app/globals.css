@@ -167,19 +167,35 @@ h1, h2, h3, h4, h5, h6 {
 /* Hexagonal Grid */
 .hex-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
   padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .hex {
   position: relative;
   width: 100%;
-  padding-top: 115%; /* Hexagon aspect ratio */
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  padding-top: 100%; /* Changed from 115% to 100% for better proportions */
   background: var(--console-bg);
   border: 1px solid var(--retro-amber);
+  border-radius: 8px; /* Changed from hexagon to rectangle with rounded corners */
   transition: all 0.3s ease;
+}
+
+.hex-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .hex:hover {
@@ -210,19 +226,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Mobile Adaptations */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hex-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  .orbit-container {
-    height: auto;
-    perspective: none;
-  }
-  
-  .orbit {
-    position: static;
-    transform: none;
-    animation: none;
+}
+
+@media (max-width: 640px) {
+  .hex-grid {
+    grid-template-columns: 1fr;
   }
 } 

@@ -45,11 +45,40 @@ const SERVICES = [
   }
 ];
 
+const COMMANDS = {
+  help: {
+    description: 'Show available commands',
+    usage: '/help'
+  },
+  services: {
+    description: 'Navigate to services section',
+    usage: '/services'
+  },
+  contact: {
+    description: 'Navigate to contact page',
+    usage: '/contact'
+  },
+  clear: {
+    description: 'Clear terminal output',
+    usage: '/clear'
+  },
+  about: {
+    description: 'Show information about T-Minus',
+    usage: '/about'
+  },
+  status: {
+    description: 'Show system status',
+    usage: '/status'
+  }
+};
+
 export default function Home() {
   const [bootStep, setBootStep] = useState(0);
   const [command, setCommand] = useState('');
   const [isBooted, setIsBooted] = useState(false);
   const commandInputRef = useRef<HTMLInputElement>(null);
+  const [terminalOutput, setTerminalOutput] = useState<Array<{type: 'command' | 'response', content: string}>>([]);
+  const terminalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Boot sequence animation
@@ -63,23 +92,34 @@ export default function Home() {
     }
   }, [bootStep]);
 
+  useEffect(() => {
+    // Scroll terminal to bottom when output changes
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [terminalOutput]);
+
+  const addToTerminal = (content: string, type: 'command' | 'response') => {
+    setTerminalOutput(prev => [...prev, { type, content }]);
+  };
+
   const handleCommand = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle CLI commands here
-    switch (command.toLowerCase()) {
-      case '/help':
-        console.log('Available commands: /help, /services, /contact, /about');
-        break;
+    const cmd = command.toLowerCase().trim();
+
+    switch (cmd) {
       case '/services':
         document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
         break;
       case '/contact':
         window.location.href = '/contact';
         break;
-      default:
-        console.log('Command not recognized. Type /help for available commands.');
     }
-    setCommand('');
+    
+    // Don't clear command if it's /help so the help menu stays visible
+    if (cmd !== '/help') {
+      setCommand('');
+    }
   };
 
   return (
@@ -129,8 +169,20 @@ export default function Home() {
                   onChange={(e) => setCommand(e.target.value)}
                   className="bg-transparent border-none outline-none flex-1 ml-2 cli"
                   placeholder="Type /help for available commands"
+                  autoComplete="off"
                 />
               </form>
+              {command === '/help' && (
+                <div className="mt-4 text-crt-green">
+                  Available commands:
+                  <br />
+                  /help - Show this help message
+                  <br />
+                  /services - View our services
+                  <br />
+                  /contact - Get in touch
+                </div>
+              )}
             </div>
 
             {/* Services Grid */}
@@ -138,11 +190,11 @@ export default function Home() {
               <h2 className="text-3xl mb-12 text-center">Mission Capabilities</h2>
               <div className="hex-grid">
                 {SERVICES.map((service, index) => (
-                  <div key={index} className="hex p-6">
-                    <div className="absolute inset-0 flex items-center justify-center flex-col p-4">
-                      <div className="text-4xl mb-4">{service.icon}</div>
-                      <h3 className="text-lg font-bold mb-2">{service.title}</h3>
-                      <p className="text-sm text-gray-300">{service.description}</p>
+                  <div key={index} className="hex">
+                    <div className="hex-content">
+                      <div className="text-4xl mb-6">{service.icon}</div>
+                      <h3 className="text-xl font-bold mb-4">{service.title}</h3>
+                      <p className="text-gray-300">{service.description}</p>
                     </div>
                   </div>
                 ))}
