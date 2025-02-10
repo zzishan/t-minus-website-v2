@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core theme colors */
+  --deep-space: #0A0A0A;
+  --retro-amber: #FFB300;
+  --crt-green: #00FF87;
+  --warning-red: #FF4545;
+  --neutral-gray: #808080;
+  
+  /* UI element colors */
+  --console-bg: rgba(10, 10, 10, 0.95);
+  --screen-glow: rgba(255, 179, 0, 0.15);
+  --grid-line: rgba(255, 179, 0, 0.1);
+  
+  /* Typography */
+  --font-mono: 'Space Mono', 'SF Mono', monospace;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--deep-space);
+  overflow-x: hidden;
+}
+
+body {
+  color: white;
+  font-family: var(--font-sans);
+  background: 
+    linear-gradient(0deg, var(--deep-space), transparent),
+    repeating-linear-gradient(
+      0deg,
+      var(--grid-line) 0px,
+      var(--grid-line) 1px,
+      transparent 1px,
+      transparent 50px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--grid-line) 0px,
+      var(--grid-line) 1px,
+      transparent 1px,
+      transparent 50px
+    );
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-mono);
+  color: var(--retro-amber);
+}
+
+/* Console Effect */
+.console {
+  background: var(--console-bg);
+  border: 1px solid var(--retro-amber);
+  box-shadow: 
+    0 0 10px var(--screen-glow),
+    inset 0 0 10px var(--screen-glow);
+  padding: 1.5rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+/* CRT Screen Effect */
+.crt-screen {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(0, 0, 0, 0.1) 50%
+    );
+  background-size: 100% 4px;
+  pointer-events: none;
+  animation: scan-lines 10s linear infinite;
+}
+
+@keyframes scan-lines {
+  from { transform: translateY(0); }
+  to { transform: translateY(4px); }
+}
+
+/* Command Line Interface */
+.cli {
+  font-family: var(--font-mono);
+  color: var(--crt-green);
+}
+
+.cli-prompt::before {
+  content: '>';
+  color: var(--retro-amber);
+  margin-right: 0.5rem;
+}
+
+/* Orbit Navigation */
+.orbit-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  perspective: 1000px;
+}
+
+.orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+  animation: orbit-rotation 60s linear infinite;
+}
+
+@keyframes orbit-rotation {
+  from { transform: translate(-50%, -50%) rotateY(0deg); }
+  to { transform: translate(-50%, -50%) rotateY(360deg); }
+}
+
+/* Retro Buttons */
+.btn-retro {
+  background: transparent;
+  border: 2px solid var(--retro-amber);
+  color: var(--retro-amber);
+  font-family: var(--font-mono);
+  padding: 0.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-retro:hover {
+  background: var(--retro-amber);
+  color: var(--deep-space);
+}
+
+.btn-retro::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.btn-retro:hover::before {
+  left: 100%;
+}
+
+/* Hexagonal Grid */
+.hex-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.hex {
+  position: relative;
+  width: 100%;
+  padding-top: 115%; /* Hexagon aspect ratio */
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  background: var(--console-bg);
+  border: 1px solid var(--retro-amber);
+  transition: all 0.3s ease;
+}
+
+.hex:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px var(--screen-glow);
+}
+
+/* Loading Animation */
+@keyframes countdown {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.loading-bar {
+  height: 2px;
+  background: var(--retro-amber);
+  transform-origin: left;
+  animation: countdown 3s linear infinite;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .orbit,
+  .loading-bar,
+  .crt-screen::before {
+    animation: none;
+  }
+}
+
+/* Mobile Adaptations */
+@media (max-width: 768px) {
+  .hex-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .orbit-container {
+    height: auto;
+    perspective: none;
+  }
+  
+  .orbit {
+    position: static;
+    transform: none;
+    animation: none;
+  }
+} 
